@@ -1,0 +1,69 @@
+pipeline {
+    agent any
+    
+
+    stages {
+        stage('get_commit_details') {
+            steps {
+                script {
+                    env.GIT_COMMIT_MSG = sh(script: 'git log -1 --pretty=%B ${GIT_COMMIT}', returnStdout: true).trim()
+                    env.GIT_COMMIT_DETAILS = sh(script: 'git log -1 --pretty="commit %H%nAuthor: %an <%ae>%nDate:   %cd"', returnStdout: true).trim()
+                    env.BRANCH_NAME = sh(returnStdout: true, script: 'git rev-parse --abbrev-ref HEAD').trim()
+                    def get_branch_url_script = """
+                        git remote show origin -n | grep "Fetch URL:" | cut -d " " -f 5 | sed "s/\\.git\$//" | sed "s|^git@|https://|"
+                    """
+                    env.BRANCH_URL = sh(returnStdout: true, script: get_branch_url_script).trim() + "/tree/${env.BRANCH_NAME}"
+                    echo "Author Name: ${env.GIT_COMMIT_DETAILS}"
+                    echo "Branch URL : ${env.BRANCH_URL}"
+                }
+            }
+        }
+         stage('Setup Python Virtual Environment'){
+            steps {
+                sh '''
+                    export DJANGO_SETTINGS_MODULE=InacheBackend.settings.staging 
+                    chmod +x envsetup.py
+                    python3 envsetup.py
+                    '''
+            }
+        }
+    }
+
+post{
+        always {
+            slackSend channel: 'jenkinsnotif',
+            message: "Please find the details of your build:\nJob '${env.JOB_NAME} [${currentBuild.number}]' ${currentBuild.currentResult}! View build results: ${env.BUILD_URL}",
+            color: currentBuild.currentResult == 'SUCCESS' ? 'good' : 'danger',
+            attachments: [
+                [
+                    fallback: "Build details",
+                    title: "Build details",
+                    color: currentBuild.currentResult == 'SUCCESS' ? 'good' : 'danger',
+                    fields: [
+                        [
+                            title: "Branch",
+                            value: "${env.BRANCH_NAME}",
+                        ],
+                        [
+                            title: "Last commit message",
+                            value: "${env.GIT_COMMIT_MSG}",
+                        ],
+                        [
+                            title: "Build duration",
+                            value: "${currentBuild.durationString}",
+                            short: true
+                        ],
+                        [
+                          title: "Committed By",
+                          value: "${env.GIT_COMMIT_DETAILS}",
+                        ],
+                        [
+                          title: "GIT URL",
+                          value: "${env.BRANCH_URL}",
+                        ]
+                    ]
+                ]
+            ]
+        }
+    }
+}

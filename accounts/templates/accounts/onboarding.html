@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+  <body>
+    <div
+      style="
+        position: relative;
+        background-color: #e7e9f0;
+        margin: 0;
+        padding: 1rem 2rem;
+        font-family: Poppins, sans-serif;
+      "
+    >
+      <img
+        src="Emailbackground.png"
+        style="position: absolute; right: 0; top: 0; width: 30%; z-index: 0;"
+      />
+      <img
+        src="Emailbackground.png"
+        style="
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          width: 30%;
+          z-index: 0;
+          transform: rotate(180deg);
+        "
+      />
+      <h1 style="color: #4318ff;">Inache</h1>
+      <div
+        style="
+          width: 80%;
+          margin: auto;
+          text-align: start;
+          position: relative;
+          z-index: 9;
+        "
+      >
+        <div><h2>Hi {{account.user_name}}</h2></div>
+        <div style="width: 100%; margin: auto; padding: 1rem 0;">
+          <p>
+            We are pleased to inform you that you have been assigned a new role at {{org_name}}.
+          </p>
+        </div>
+        <div
+          style="
+            background: #ffffff;
+            width: 100%;
+            margin: auto;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 4px 4px 9px rgba(0, 0, 0, 0.25);
+          "
+        >
+        <div style="padding: 1rem 2rem; text-align: center">
+          <p>To get started with your new role, follow the steps below:</p>
+          <p>
+            1. Click on the following link to create a new password
+            <a href={{account.absurl}}>[password reset link]</a>
+          </p>
+          <p>2. Create a strong password.</p>
+
+          <p>3. Confirm your new Password. </p>
+          
+          <a href={{account.absurl}}>
+            <button
+              style="
+                cursor: pointer;
+                color: white;
+                padding: 8px 18px;
+                border: 0;
+                background: linear-gradient(45deg, #a3aed0 0%, #0020d3 100%);
+              "
+            >
+              Sign up
+            </button>
+          </a>
+          <p style="font-size: 14px;">
+            Note: The password reset link will only be accessible for the next 2 days. 
+          </p>
+        </div>
+      </div>
+        <p>
+          As part of the {{account.role}}, you will be responsible for:
+       <ul>
+         <!-- Will Change based on role -->
+         {% comment %} {{account.Responsibilities}} {% endcomment %}
+        {% for res in account.Responsibilities %}
+            <li> {{res}} </li>
+        {% endfor %}
+
+       </ul>
+        We believe that you have the skills and expertise required to excel in this role, and we are excited to have you on board.
+        </p>
+        <p>We welcome to our Inache family as a Factory Admin. We look forward to working with you to make a difference in our community.</p>
+        <p>Best regards, {{org_name}}</p>
+      </div>
+    </div>
+  </body>
+
+</html>
