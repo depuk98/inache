@@ -109,6 +109,32 @@ class VirtualEnvironmentManager:
         status = subprocess.getoutput(f"sudo systemctl status {service_name}")
         print(f"The status of {service_name} after restart:\n{status}\n")
     def celery_restart(self):
+        print("Restarting Celery Worker and Beat...")
+        python_path = self.get_venv()
+
+        # Stop Celery processes
+        stop_result = subprocess.run(["pkill", "-f", "celery -A InacheBackend"])
+        if stop_result.returncode == 0:
+            print("Celery processes stopped successfully.")
+        else:
+            print(f"Error: Failed to stop Celery processes. Exit code: {stop_result.returncode}")
+            sys.exit(1)
+
+        # Start Celery Worker
+        worker_result = subprocess.run([python_path, "manage.py", "celery", "worker", "--detach", "--loglevel=info"])
+        if worker_result.returncode == 0:
+            print("Celery Worker started successfully.")
+        else:
+            print(f"Error: Failed to start Celery Worker. Exit code: {worker_result.returncode}")
+            sys.exit(1)
+
+        # Start Celery Beat
+        beat_result = subprocess.run([python_path, "manage.py", "celery", "beat", "--detach", "--loglevel=info"])
+        if beat_result.returncode == 0:
+            print("Celery Beat started successfully.")
+        else:
+            print(f"Error: Failed to start Celery Beat. Exit code: {beat_result.returncode}")
+            sys.exit(1)
         
 
     def hashcheck(self):
