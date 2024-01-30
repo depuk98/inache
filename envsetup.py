@@ -25,7 +25,7 @@ class VirtualEnvironmentManager:
         if os.path.isdir(self.venv_name):
             print(f'Python virtual environment "{self.venv_name}" exists.')
         else:
-            result = subprocess.run(["python3.9", "-m", "venv", self.venv_name])
+            result = subprocess.run(["python3", "-m", "venv", self.venv_name])
             if result.returncode != 0:
                 print("Error: Virtual environment creation failed.")
                 sys.exit(1)
