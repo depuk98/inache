@@ -122,11 +122,11 @@ class VirtualEnvironmentManager:
 
         # Start Celery Worker
         worker_result = subprocess.run([python_path, "manage.py", "celery", "worker", "--detach", "--loglevel=info"])
-        if worker_result.returncode == 0:
-            print("Celery Worker started successfully.")
-        else:
-            print(f"Error: Failed to start Celery Worker. Exit code: {worker_result.returncode}")
-            sys.exit(1)
+        # if worker_result.returncode == 0:
+        #     print("Celery Worker started successfully.")
+        # else:
+        #     print(f"Error: Failed to start Celery Worker. Exit code: {worker_result.returncode}")
+        #     sys.exit(1)
 
         # Start Celery Beat
         beat_result = subprocess.run([python_path, "manage.py", "celery", "beat", "--detach", "--loglevel=info"])
