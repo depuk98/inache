@@ -29,41 +29,41 @@ pipeline {
         }
     }
 
-post{
-        always {
-            slackSend channel: 'jenkinsnotif',
-            message: "Please find the details of your build:\nJob '${env.JOB_NAME} [${currentBuild.number}]' ${currentBuild.currentResult}! View build results: ${env.BUILD_URL}",
-            color: currentBuild.currentResult == 'SUCCESS' ? 'good' : 'danger',
-            attachments: [
-                [
-                    fallback: "Build details",
-                    title: "Build details",
-                    color: currentBuild.currentResult == 'SUCCESS' ? 'good' : 'danger',
-                    fields: [
-                        [
-                            title: "Branch",
-                            value: "${env.BRANCH_NAME}",
-                        ],
-                        [
-                            title: "Last commit message",
-                            value: "${env.GIT_COMMIT_MSG}",
-                        ],
-                        [
-                            title: "Build duration",
-                            value: "${currentBuild.durationString}",
-                            short: true
-                        ],
-                        [
-                          title: "Committed By",
-                          value: "${env.GIT_COMMIT_DETAILS}",
-                        ],
-                        [
-                          title: "GIT URL",
-                          value: "${env.BRANCH_URL}",
-                        ]
-                    ]
-                ]
-            ]
-        }
-    }
-}
+// post{
+//         always {
+//             slackSend channel: 'jenkinsnotif',
+//             message: "Please find the details of your build:\nJob '${env.JOB_NAME} [${currentBuild.number}]' ${currentBuild.currentResult}! View build results: ${env.BUILD_URL}",
+//             color: currentBuild.currentResult == 'SUCCESS' ? 'good' : 'danger',
+//             attachments: [
+//                 [
+//                     fallback: "Build details",
+//                     title: "Build details",
+//                     color: currentBuild.currentResult == 'SUCCESS' ? 'good' : 'danger',
+//                     fields: [
+//                         [
+//                             title: "Branch",
+//                             value: "${env.BRANCH_NAME}",
+//                         ],
+//                         [
+//                             title: "Last commit message",
+//                             value: "${env.GIT_COMMIT_MSG}",
+//                         ],
+//                         [
+//                             title: "Build duration",
+//                             value: "${currentBuild.durationString}",
+//                             short: true
+//                         ],
+//                         [
+//                           title: "Committed By",
+//                           value: "${env.GIT_COMMIT_DETAILS}",
+//                         ],
+//                         [
+//                           title: "GIT URL",
+//                           value: "${env.BRANCH_URL}",
+//                         ]
+//                     ]
+//                 ]
+//             ]
+//         }
+//     }
+// }
