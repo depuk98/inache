@@ -4,7 +4,7 @@ print("test: i am inside the staging.py file")
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "inache_stage",
+        "NAME": "inachestage2311",
         "USER": "postgres",
         "PASSWORD": "admin98",
         "HOST": "localhost",
